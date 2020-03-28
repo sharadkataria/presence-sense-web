@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NavBar from '../../components/NavBar';
 
 class LoginPage extends Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class LoginPage extends Component {
   render() {
     return (
       <div className='container'>
+        <NavBar />
         <div className='row'>
           <div className='login-wrapper'>
             <h5>Please enter your details</h5>

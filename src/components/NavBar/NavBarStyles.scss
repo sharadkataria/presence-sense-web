@@ -1,0 +1,21 @@
+.navbar-wrapper {
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+
+  .navbar-btn-left {
+    padding: 4px;
+    justify-content: space-evenly;
+    display: flex;
+  }
+
+  .navbar-btn-right {
+    padding: 4px;
+    justify-content: flex-end;
+    display: flex;
+
+    .flow {
+      margin-left: 10px;
+    }
+  }
+}
