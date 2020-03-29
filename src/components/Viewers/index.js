@@ -9,7 +9,7 @@ class Viewers extends Component {
     this.state = {
       showToolTip: false,
       toolTip: null,
-      showMore: true
+      showMore: false
     };
     this.backgroundColors = ['red', 'lightblue', 'orange', 'green', 'maroon'];
   }
@@ -154,96 +154,6 @@ class Viewers extends Component {
                 <div
                   className='tooltip-list-avatar'
                   style={{ backgroundColor: this.backgroundColors[3] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
                 >
                   SK
                 </div>

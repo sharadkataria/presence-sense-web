@@ -2,28 +2,29 @@ import React, { Component } from 'react';
 import styles from './NavBarStyles.scss';
 import ViewersModal from '../ViewersModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChartLine,
-  faShareAlt,
-  faUsers
-} from '@fortawesome/free-solid-svg-icons';
+import { faShareAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Viewers from '../Viewers';
+import ShareModal from '../ShareModal';
 class NavBar extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showViewersModal: false
+      showViewersModal: false,
+      showShareModal: false
     };
   }
 
   toggleViewersModal = () => {
-    console.log('called');
     this.setState({ showViewersModal: !this.state.showViewersModal });
   };
 
+  toggleShareModal = () => {
+    this.setState({ showShareModal: !this.state.showShareModal });
+  };
+
   render() {
-    const { showViewersModal } = this.state;
+    const { showViewersModal, showShareModal } = this.state;
     return (
       <React.Fragment>
         <div style={styles} className='row navbar-wrapper'>
@@ -48,7 +49,12 @@ class NavBar extends Component {
             >
               <FontAwesomeIcon icon={faUsers} />
             </button>
-            <button type='button' className='btn btn-success flow'>
+
+            <button
+              type='button'
+              className='btn btn-success flow'
+              onClick={this.toggleShareModal}
+            >
               <FontAwesomeIcon icon={faShareAlt} />
               Share
             </button>
@@ -60,6 +66,10 @@ class NavBar extends Component {
             show={showViewersModal}
             onHide={this.toggleViewersModal}
           />
+        ) : null}
+
+        {showShareModal ? (
+          <ShareModal show={showShareModal} onHide={this.toggleShareModal} />
         ) : null}
       </React.Fragment>
     );

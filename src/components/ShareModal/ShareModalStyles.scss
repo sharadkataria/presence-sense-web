@@ -1,0 +1,21 @@
+.email-wrapper {
+  display: flex;
+  justify-content: start;
+  padding: 10px 10px 0 0;
+  margin-top: 10px;
+
+  .email-cross {
+    border-left: 0px;
+    border-radius: 0.25rem;
+  }
+}
+
+.checkbox-label {
+  font-weight: bold;
+  color: grey;
+
+  p {
+    font-weight: 450;
+    font-size: 14px;
+  }
+}
