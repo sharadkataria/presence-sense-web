@@ -54,7 +54,7 @@ class LoginPage extends Component {
                 this.setStateValues('password', event.currentTarget.value)
               }
             />
-            <button type='button' className='btn btn-dark'>
+            <button type='button' className='btn btn-outline-dark'>
               Login
             </button>
             <hr />
@@ -62,7 +62,7 @@ class LoginPage extends Component {
               Don't have an account?
               <span className='signup-text-span'>
                 <button
-                  className='btn btn-secondary'
+                  className='btn btn-outline-secondary'
                   onClick={this.singupRedirection}
                 >
                   Signup

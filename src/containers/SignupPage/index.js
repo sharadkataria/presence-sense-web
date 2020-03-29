@@ -69,7 +69,7 @@ class SignupPage extends Component {
             />
             <button
               type='button'
-              className='btn btn-dark'
+              className='btn btn-outline-dark'
               onClick={this.signupHandler}
             >
               Signup
@@ -80,7 +80,7 @@ class SignupPage extends Component {
               <span className='signup-text-span'>
                 <button
                   onClick={this.loginRedirection}
-                  className='btn btn-secondary'
+                  className='btn btn-outline-secondary'
                 >
                   Login
                 </button>

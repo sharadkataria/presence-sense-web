@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import styles from './NavBarStyles.scss';
+import ViewersModal from '../ViewersModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChartLine,
+  faShareAlt,
+  faUsers
+} from '@fortawesome/free-solid-svg-icons';
 import Viewers from '../Viewers';
-
 class NavBar extends Component {
   constructor(props) {
     super(props);
@@ -33,21 +39,27 @@ class NavBar extends Component {
             </button>
           </div>
           <div className='col-lg-6 col-sm-12 navbar-btn-right'>
+            <Viewers />
             <button
               type='button'
+              title='Viewers'
               className='btn btn-outline-dark flow'
               onClick={this.toggleViewersModal}
             >
-              Viewers
+              <FontAwesomeIcon icon={faUsers} />
             </button>
             <button type='button' className='btn btn-success flow'>
+              <FontAwesomeIcon icon={faShareAlt} />
               Share
             </button>
           </div>
         </div>
 
         {showViewersModal ? (
-          <Viewers show={showViewersModal} onHide={this.toggleViewersModal} />
+          <ViewersModal
+            show={showViewersModal}
+            onHide={this.toggleViewersModal}
+          />
         ) : null}
       </React.Fragment>
     );
