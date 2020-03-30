@@ -25,6 +25,7 @@ class NavBar extends Component {
   };
 
   render() {
+    const { showViewersSection } = this.props;
     const { showViewersModal, showShareModal } = this.state;
     return (
       <React.Fragment>
@@ -44,26 +45,28 @@ class NavBar extends Component {
               Logout
             </button>
           </div>
-          <div className='col-lg-6 col-sm-12 navbar-btn-right'>
-            <Viewers />
-            <button
-              type='button'
-              title='Viewers'
-              className='btn btn-outline-dark flow'
-              onClick={this.toggleViewersModal}
-            >
-              <FontAwesomeIcon icon={faUsers} />
-            </button>
+          {showViewersSection ? (
+            <div className='col-lg-6 col-sm-12 navbar-btn-right'>
+              <Viewers />
+              <button
+                type='button'
+                title='Viewers'
+                className='btn btn-outline-dark flow'
+                onClick={this.toggleViewersModal}
+              >
+                <FontAwesomeIcon icon={faUsers} />
+              </button>
 
-            <button
-              type='button'
-              className='btn btn-success flow'
-              onClick={this.toggleShareModal}
-            >
-              <FontAwesomeIcon icon={faShareAlt} />
-              Share
-            </button>
-          </div>
+              <button
+                type='button'
+                className='btn btn-success flow'
+                onClick={this.toggleShareModal}
+              >
+                <FontAwesomeIcon icon={faShareAlt} />
+                Share
+              </button>
+            </div>
+          ) : null}
         </div>
 
         {showViewersModal ? (

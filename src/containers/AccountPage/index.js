@@ -15,7 +15,7 @@ class AccountPage extends Component {
   }
 
   handleNavigation = identifier => {
-    this.props.history.push(`/signup?id=${identifier}`);
+    this.props.history.push(`/document/${identifier}`);
   };
 
   setStateValues = (fieldName, fieldValue) => {

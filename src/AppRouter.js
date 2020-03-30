@@ -5,6 +5,7 @@ import HomePage from './containers/HomePage';
 import LoginPage from './containers/LoginPage';
 import SignupPage from './containers/SignupPage';
 import AccountPage from './containers/AccountPage';
+import DocumentPage from './containers/DocumentPage';
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
         <Route exact path='/login' component={LoginPage} />
         <Route exact path='/signup' component={SignupPage} />
         <Route exact path='/account' component={AccountPage} />
+        <Route exact path='/document/:docIdentifier' component={DocumentPage} />
       </Switch>
     </Router>
   );
