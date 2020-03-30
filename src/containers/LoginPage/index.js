@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../../components/NavBar';
+import { Form, Button } from 'react-bootstrap';
 
 class LoginPage extends Component {
   constructor(props) {
@@ -36,37 +37,43 @@ class LoginPage extends Component {
         <div className='row'>
           <div className='login-wrapper'>
             <h5>Please enter your details</h5>
-            <label>Email</label>
-            <input
-              type='text'
-              className='input-field'
-              placeholder='Enter your email'
-              onChange={event =>
-                this.setStateValues('email', event.currentTarget.value)
-              }
-            />
-            <label>Password</label>
-            <input
-              type='password'
-              className='input-field'
-              placeholder='Enter your password'
-              onChange={event =>
-                this.setStateValues('password', event.currentTarget.value)
-              }
-            />
-            <button type='button' className='btn btn-outline-dark'>
+            <Form>
+              <Form.Group>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type='text'
+                  className='input-field'
+                  placeholder='Enter your email'
+                  onChange={event =>
+                    this.setStateValues('email', event.currentTarget.value)
+                  }
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  className='input-field'
+                  placeholder='Enter your password'
+                  onChange={event =>
+                    this.setStateValues('password', event.currentTarget.value)
+                  }
+                />
+              </Form.Group>
+            </Form>
+            <Button type='button' variant='outline-dark'>
               Login
-            </button>
+            </Button>
             <hr />
             <p className='signup-text'>
               Don't have an account?
               <span className='signup-text-span'>
-                <button
-                  className='btn btn-outline-secondary'
+                <Button
+                  variant='outline-secondary'
                   onClick={this.singupRedirection}
                 >
                   Signup
-                </button>
+                </Button>
               </span>
             </p>
             <hr />

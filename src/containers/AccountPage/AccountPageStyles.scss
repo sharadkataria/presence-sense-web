@@ -1,0 +1,36 @@
+.column-wrapper {
+  padding: 40px;
+  margin-top: 50px;
+  color: grey;
+
+  .column-item {
+    margin-bottom: 20px;
+
+    th {
+      color: grey;
+    }
+
+    p {
+      margin: 10px 0 10px 0;
+    }
+
+    .documents-table {
+      width: 100%;
+      overflow: auto;
+
+      tbody {
+        max-height: 300px;
+        overflow-y: auto;
+        width: 100%;
+      }
+
+      thead,
+      tbody,
+      tr,
+      td,
+      th {
+        display: block;
+      }
+    }
+  }
+}

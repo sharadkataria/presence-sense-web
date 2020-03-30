@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Viewers from '../Viewers';
 import ShareModal from '../ShareModal';
+import { Link } from 'react-router-dom';
 class NavBar extends Component {
   constructor(props) {
     super(props);
@@ -32,9 +33,13 @@ class NavBar extends Component {
             <button type='button' className='btn btn-outline-dark'>
               Homepage
             </button>
-            <button type='button' className='btn btn-outline-dark'>
+            <Link
+              to='/account'
+              type='button'
+              className='d-flex align-items-center justify-content-center btn btn-outline-dark'
+            >
               Account
-            </button>
+            </Link>
             <button type='button' className='btn btn-outline-dark'>
               Logout
             </button>

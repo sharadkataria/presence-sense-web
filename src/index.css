@@ -15,7 +15,7 @@ code {
 .login-wrapper {
   border: 1px solid grey;
   margin: 0 auto;
-  margin-top: 15%;
+  margin-top: 10%;
   padding: 20px;
   align-items: center;
   justify-content: center;
@@ -28,7 +28,6 @@ code {
   display: inline-block;
   width: 100%;
   padding: 8px;
-  margin-bottom: 16px;
   border-radius: 5px;
 }
 

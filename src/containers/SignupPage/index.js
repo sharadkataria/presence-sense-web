@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Button, Form } from 'react-bootstrap';
+import NavBar from '../../components/NavBar';
 
 class SignupPage extends Component {
   constructor(props) {
@@ -34,56 +36,62 @@ class SignupPage extends Component {
 
     return (
       <div className='container'>
+        <NavBar />
         <div className='row'>
           <div className='login-wrapper'>
             <h5>Please enter your details</h5>
-            <label>Name</label>
-            <input
-              type='text'
-              value={formData.name}
-              className='input-field'
-              placeholder='Enter your name'
-              onChange={event =>
-                this.setStateValues('name', event.currentTarget.value)
-              }
-            />
-            <label>Email</label>
-            <input
-              type='text'
-              value={formData.email}
-              className='input-field'
-              placeholder='Enter your email'
-              onChange={event =>
-                this.setStateValues('email', event.currentTarget.value)
-              }
-            />
-            <label>Password</label>
-            <input
-              type='password'
-              value={formData.password}
-              className='input-field'
-              placeholder='Enter your password'
-              onChange={event =>
-                this.setStateValues('password', event.currentTarget.value)
-              }
-            />
-            <button
+            <Form>
+              <Form.Group>
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  className='input-field'
+                  placeholder='Enter your name'
+                  onChange={event =>
+                    this.setStateValues('name', event.currentTarget.value)
+                  }
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type='text'
+                  className='input-field'
+                  placeholder='Enter your email'
+                  onChange={event =>
+                    this.setStateValues('email', event.currentTarget.value)
+                  }
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  className='input-field'
+                  placeholder='Enter your password'
+                  onChange={event =>
+                    this.setStateValues('password', event.currentTarget.value)
+                  }
+                />
+              </Form.Group>
+            </Form>
+            <Button
               type='button'
-              className='btn btn-outline-dark'
+              variant='outline-dark'
               onClick={this.signupHandler}
             >
               Signup
-            </button>
+            </Button>
             <hr />
             <p className='signup-text'>
               Already have an account?
               <span className='signup-text-span'>
-                <button
+                <Button
                   onClick={this.loginRedirection}
-                  className='btn btn-outline-secondary'
+                  variant='outline-secondary'
                 >
                   Login
-                </button>
+                </Button>
               </span>
             </p>
             <hr />
