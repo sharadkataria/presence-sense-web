@@ -1,15 +1,31 @@
 import React, { Component } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Form } from 'react-bootstrap';
 import NavBar from '../../components/NavBar';
 import styles from './AccountPageStyles.scss';
 
 class AccountPage extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      formData: {
+        name: ''
+      }
+    };
   }
 
   handleNavigation = identifier => {
     this.props.history.push(`/signup?id=${identifier}`);
+  };
+
+  setStateValues = (fieldName, fieldValue) => {
+    const formData = this.state.formData;
+    formData[fieldName] = fieldValue;
+    this.setState({ formData });
+  };
+
+  createDocumentHandler = () => {
+    console.log(this.state.formData);
   };
 
   render() {
@@ -18,15 +34,28 @@ class AccountPage extends Component {
         <NavBar />
         <div className='row column-wrapper'>
           <div className='col-lg-6 col-md-6 col-sm-12 column-item'>
-            <h5>Create a new document</h5>
-            <Button variant='outline-dark'>Create</Button>
+            <h4>Create a new document</h4>
+            <Form>
+              <Form.Group>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter a name'
+                  onChange={event =>
+                    this.setStateValues('name', event.currentTarget.value)
+                  }
+                />
+              </Form.Group>
+            </Form>
+            <Button variant='outline-dark' onClick={this.createDocumentHandler}>
+              Create
+            </Button>
             <p>
               Documents are created private by default. To make it public, click
               on the share button inside the document.
             </p>
           </div>
           <div className='col-lg-6 col-md-6 col-sm-12 column-item'>
-            <h5>Your documents</h5>
+            <h4>Your documents</h4>
             <Table bordered hover className='documents-table'>
               <thead>
                 <tr>
