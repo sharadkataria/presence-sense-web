@@ -3,7 +3,7 @@ import styles from './ViewersStyles.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCross, faCut, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
-
+import lodash from 'lodash';
 class Viewers extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +11,8 @@ class Viewers extends Component {
     this.state = {
       showToolTip: false,
       toolTip: null,
-      showMore: false
+      showMore: false,
+      activeViewers: []
     };
     this.backgroundColors = ['red', 'lightblue', 'orange', 'green', 'maroon'];
   }
@@ -28,25 +29,47 @@ class Viewers extends Component {
     this.setState({ showMore: !this.state.showMore });
   };
 
-  render() {
-    const { toolTip, showToolTip, showMore } = this.state;
+  componentDidMount() {
+    this.updateActiveViewers();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!lodash.isEqual(prevProps.viewers, this.props.viewers)) {
+      this.updateActiveViewers();
+    }
+  }
+
+  updateActiveViewers = () => {
     const { viewers, user } = this.props;
-    let indexCount = 0;
+    let activeViewers = [];
+    if (viewers && viewers.length) {
+      for (let viewer of viewers) {
+        if (viewer.active && viewer.id !== user.id) {
+          activeViewers.push(viewer);
+        }
+      }
+    }
+    this.setState({ activeViewers });
+    if (this.state.showMore && activeViewers.length < 6) {
+      this.setState({ showMore: false });
+    }
+  };
+
+  render() {
+    const { toolTip, showToolTip, showMore, activeViewers } = this.state;
     return (
       <div className='avatar' style={styles}>
         {!showMore ? (
           <React.Fragment>
-            {viewers && viewers.length
-              ? viewers.map((viewer, index) => {
-                  if (viewer.id !== user.id && viewer.active)
+            {activeViewers && activeViewers.length
+              ? activeViewers.map((viewer, index) => {
+                  if (index < 5)
                     return (
                       <div
                         key={index}
                         className='avatar-item'
                         style={{
-                          backgroundColor: this.backgroundColors[
-                            indexCount++ % 5
-                          ]
+                          backgroundColor: this.backgroundColors[index % 5]
                         }}
                         onMouseOver={() => this.onMouseOver(viewer)}
                         onMouseOut={this.onMouseOut}
@@ -57,9 +80,9 @@ class Viewers extends Component {
                 })
               : null}
 
-            {viewers && viewers.length > 5 ? (
+            {activeViewers && activeViewers.length > 5 ? (
               <div className='avatar-item-more' onClick={this.toggleShowMore}>
-                +{viewers.length - 5}
+                +{activeViewers.length - 5}
               </div>
             ) : null}
             {showToolTip ? (
@@ -81,58 +104,32 @@ class Viewers extends Component {
           </React.Fragment>
         ) : (
           <div>
-            <div className='avatar-item-more' onClick={this.toggleShowMore}>
-              <FontAwesomeIcon icon={faTimes} />
-            </div>
-            <div className='avatar-tooltip-list'>
-              <h5>8 total viewers</h5>
-              <hr />
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[0] }}
-                >
-                  SK
+            {activeViewers && activeViewers.length ? (
+              <React.Fragment>
+                <div className='avatar-item-more' onClick={this.toggleShowMore}>
+                  <FontAwesomeIcon icon={faTimes} />
                 </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[1] }}
-                >
-                  SK
+                <div className='avatar-tooltip-list'>
+                  <h5>{activeViewers.length} total viewers</h5>
+                  <hr />
+                  {activeViewers.map((viewer, index) => {
+                    return (
+                      <div key={index} className='tooltip-list-item'>
+                        <div
+                          className='tooltip-list-avatar'
+                          style={{
+                            backgroundColor: this.backgroundColors[index % 5]
+                          }}
+                        >
+                          {viewer.avatar}
+                        </div>
+                        <div className='tooltip-list-name'>{viewer.name}</div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[2] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[3] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-              <div className='tooltip-list-item'>
-                <div
-                  className='tooltip-list-avatar'
-                  style={{ backgroundColor: this.backgroundColors[4] }}
-                >
-                  SK
-                </div>
-                <div className='tooltip-list-name'> Sharad Kataria</div>
-              </div>
-            </div>
+              </React.Fragment>
+            ) : null}
           </div>
         )}
       </div>
