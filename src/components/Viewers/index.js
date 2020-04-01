@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styles from './ViewersStyles.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCross, faCut, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
+
 class Viewers extends Component {
   constructor(props) {
     super(props);
@@ -14,8 +16,8 @@ class Viewers extends Component {
     this.backgroundColors = ['red', 'lightblue', 'orange', 'green', 'maroon'];
   }
 
-  onMouseOver = value => {
-    this.setState({ showToolTip: true, toolTip: value });
+  onMouseOver = viewer => {
+    this.setState({ showToolTip: true, toolTip: viewer });
   };
 
   onMouseOut = () => {
@@ -28,76 +30,38 @@ class Viewers extends Component {
 
   render() {
     const { toolTip, showToolTip, showMore } = this.state;
+    const { viewers, user } = this.props;
+    let indexCount = 0;
     return (
       <div className='avatar' style={styles}>
         {!showMore ? (
           <React.Fragment>
-            <div
-              className='avatar-item'
-              style={{ backgroundColor: this.backgroundColors[0] }}
-              onMouseOver={() =>
-                this.onMouseOver({ name: 'Sharad 1', email: 'email@gmail.com' })
-              }
-              onMouseOut={this.onMouseOut}
-            >
-              S
-            </div>
-
-            <div
-              className='avatar-item'
-              style={{ backgroundColor: this.backgroundColors[1] }}
-              onMouseOver={() =>
-                this.onMouseOver({
-                  name: 'Sharad 2',
-                  email: 'email2@gmail.com'
+            {viewers && viewers.length
+              ? viewers.map((viewer, index) => {
+                  if (viewer.id !== user.id && viewer.active)
+                    return (
+                      <div
+                        key={index}
+                        className='avatar-item'
+                        style={{
+                          backgroundColor: this.backgroundColors[
+                            indexCount++ % 5
+                          ]
+                        }}
+                        onMouseOver={() => this.onMouseOver(viewer)}
+                        onMouseOut={this.onMouseOut}
+                      >
+                        {viewer.avatar}
+                      </div>
+                    );
                 })
-              }
-              onMouseOut={this.onMouseOut}
-            >
-              H
-            </div>
+              : null}
 
-            <div
-              className='avatar-item'
-              style={{ backgroundColor: this.backgroundColors[2] }}
-              onMouseOver={() =>
-                this.onMouseOver({
-                  name: 'Sharad 3',
-                  email: 'email3@gmail.com'
-                })
-              }
-              onMouseOut={this.onMouseOut}
-            >
-              A
-            </div>
-
-            <div
-              className='avatar-item'
-              style={{ backgroundColor: this.backgroundColors[3] }}
-              onMouseOver={() =>
-                this.onMouseOver({
-                  name: 'Sharad 4',
-                  email: 'email4@gmail.com'
-                })
-              }
-              onMouseOut={this.onMouseOut}
-            >
-              R
-            </div>
-
-            <div
-              className='avatar-item'
-              style={{ backgroundColor: this.backgroundColors[4] }}
-              onMouseOver={() => this.onMouseOver(null)}
-              onMouseOut={this.onMouseOut}
-            >
-              A
-            </div>
-
-            <div className='avatar-item-more' onClick={this.toggleShowMore}>
-              +5
-            </div>
-
+            {viewers && viewers.length > 5 ? (
+              <div className='avatar-item-more' onClick={this.toggleShowMore}>
+                +{viewers.length - 5}
+              </div>
+            ) : null}
             {showToolTip ? (
               <span className='avatar-tooltip'>
                 <div className='row'>
@@ -176,4 +140,11 @@ class Viewers extends Component {
   }
 }
 
-export default Viewers;
+const mapStateToProps = state => ({
+  viewers: state.documentData.viewers,
+  user: state.userData.userDetails
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Viewers);

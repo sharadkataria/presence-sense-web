@@ -1,30 +1,63 @@
 import React, { Component } from 'react';
+import get from 'lodash/get';
+import { connect } from 'react-redux';
 import NavBar from '../../components/NavBar';
 import styles from './DocumentPageStyles.scss';
 import socketIOClient from 'socket.io-client';
+import DocumentService from '../../services/DocumentService';
+import RequireAuth from '../../hoc/RequireAuth';
+import { updateViewers, removeViewers } from '../../actions/DocumentActions';
 class DocumentPage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      documentID: this.props.match.params.docIdentifier
+      documentID: this.props.match.params.docIdentifier,
+      document: null
     };
     this.socket = null;
+    this.documentService = new DocumentService();
   }
 
   componentDidMount() {
-    this.initialiseSocket();
+    this.getDocumentData();
+    // this.initialiseSocket();
   }
+
+  getDocumentData = () => {
+    const { documentID } = this.state;
+
+    if (!documentID) {
+      return this.props.history.push('/account');
+    }
+
+    this.documentService
+      .getDocumentByID(documentID)
+      .then(data => {
+        this.setState({ document: data }, () => {
+          this.initialiseSocket();
+        });
+      })
+      .catch(error => {
+        const errors = get(error, 'response.data', ['Something went wrong.']);
+        alert(errors);
+      });
+  };
 
   initialiseSocket = () => {
     const { documentID } = this.state;
+    const { userDetails } = this.props;
+
     this.socket = socketIOClient('http://localhost:3003/');
 
     this.socket.on(documentID, payload => {
-      console.log(payload);
+      this.props.updateViewers(payload);
     });
 
-    this.socket.emit('document-connect', { documentID });
+    this.socket.emit('document-connect', {
+      documentID,
+      userID: userDetails.id
+    });
   };
 
   render() {
@@ -56,9 +89,20 @@ class DocumentPage extends Component {
   }
 
   componentWillUnmount() {
-    const { documentID } = this.state;
-    this.socket.emit('document-disconnect', { documentID });
+    this.props.removeViewers();
+    if (this.socket) this.socket.disconnect();
   }
 }
 
-export default DocumentPage;
+const mapStateToProps = state => ({
+  userDetails: state.userData.userDetails
+});
+
+const mapDispatchToProps = {
+  updateViewers,
+  removeViewers
+};
+
+export default RequireAuth(
+  connect(mapStateToProps, mapDispatchToProps)(DocumentPage)
+);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button, Container, Row, Col, Table } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 class ViewersModal extends Component {
   constructor(props) {
@@ -7,6 +8,7 @@ class ViewersModal extends Component {
   }
 
   render() {
+    const { viewers } = this.props;
     return (
       <Modal
         show={this.props.show}
@@ -30,16 +32,17 @@ class ViewersModal extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>{new Date().toDateString()}</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>{new Date().toDateString()}</td>
-                  </tr>
+                  {viewers && viewers.length
+                    ? viewers.map((viewer, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{viewer.name}</td>
+                            <td>{viewer.timestamp}</td>
+                          </tr>
+                        );
+                      })
+                    : null}
                 </tbody>
               </Table>
             </Col>
@@ -55,4 +58,10 @@ class ViewersModal extends Component {
   }
 }
 
-export default ViewersModal;
+const mapStateToProps = state => ({
+  viewers: state.documentData.viewers
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewersModal);
