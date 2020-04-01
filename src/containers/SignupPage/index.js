@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import validator from 'validator';
+import get from 'lodash/get';
 import { Button, Form } from 'react-bootstrap';
+import { loginAction } from '../../actions/AuthActions';
 import NavBar from '../../components/NavBar';
-
+import AuthService from '../../services/AuthService';
+import LoggedIn from '../../hoc/LoggedIn';
 class SignupPage extends Component {
   constructor(props) {
     super(props);
@@ -12,8 +17,11 @@ class SignupPage extends Component {
         name: '',
         email: '',
         password: ''
-      }
+      },
+      errors: []
     };
+
+    this.authService = new AuthService();
   }
 
   setStateValues = (fieldName, fieldValue) => {
@@ -22,18 +30,53 @@ class SignupPage extends Component {
     this.setState({ formData });
   };
 
-  signupHandler = () => {
-    const { formData } = this.state;
-    console.log(formData);
-  };
-
   loginRedirection = () => {
     this.props.history.push('/login');
   };
 
-  render() {
-    const { formData } = this.state;
+  formValidation = () => {
+    this.setState({ errors: [] });
+    let errors = [];
+    const { name, email, password } = this.state.formData;
 
+    if (!name) {
+      errors.push('Name is required..');
+    }
+    if (!validator.isEmail(email)) {
+      errors.push('Invalid email provided.');
+    }
+    if (password.length < 6) {
+      errors.push('Invalid password provided.');
+    }
+
+    if (errors.length) {
+      this.setState({ errors });
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  signupHandler = () => {
+    const formValid = this.formValidation();
+
+    if (!formValid) {
+      return;
+    }
+
+    this.authService
+      .signup(this.state.formData)
+      .then(data => {
+        this.props.loginAction(data);
+      })
+      .catch(error => {
+        const errors = get(error, 'response.data', ['Somethign went wrong.']);
+        this.setState({ errors });
+      });
+  };
+
+  render() {
+    const { errors } = this.state;
     return (
       <div className='container'>
         <NavBar />
@@ -95,9 +138,13 @@ class SignupPage extends Component {
               </span>
             </p>
             <hr />
-            <div className='alert alert-danger' role='alert'>
-              A simple danger alert—check it out!
-            </div>
+            {errors.length ? (
+              <div className='alert alert-danger' role='alert'>
+                {errors.map((err, index) => {
+                  return <p key={index}>{err}</p>;
+                })}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -105,4 +152,12 @@ class SignupPage extends Component {
   }
 }
 
-export default SignupPage;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {
+  loginAction
+};
+
+export default LoggedIn(
+  connect(mapStateToProps, mapDispatchToProps)(SignupPage)
+);

@@ -19,7 +19,7 @@ export default class AccountService {
       });
   };
 
-  registerAccount = dataPayload => {
+  signup = dataPayload => {
     return ConnectionInstance.post(getAPIPath(SIGNUP_API_PATH), dataPayload)
       .then(responseData => {
         if (responseData) {

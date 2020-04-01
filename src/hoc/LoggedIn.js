@@ -10,7 +10,7 @@ export default ChildComponent => {
         return <Redirect to='/account' />;
       }
 
-      return <ChildComponent />;
+      return <ChildComponent {...this.props} />;
     }
   }
 

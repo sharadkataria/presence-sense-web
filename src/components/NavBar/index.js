@@ -27,7 +27,7 @@ class NavBar extends Component {
   };
 
   render() {
-    const { showViewersSection } = this.props;
+    const { showViewersSection, userDetails } = this.props;
     const { showViewersModal, showShareModal } = this.state;
     return (
       <React.Fragment>
@@ -36,20 +36,24 @@ class NavBar extends Component {
             <button type='button' className='btn btn-outline-dark'>
               Homepage
             </button>
-            <Link
-              to='/account'
-              type='button'
-              className='d-flex align-items-center justify-content-center btn btn-outline-dark'
-            >
-              Account
-            </Link>
-            <button
-              onClick={this.props.logoutAction}
-              type='button'
-              className='btn btn-outline-dark'
-            >
-              Logout
-            </button>
+            {userDetails ? (
+              <React.Fragment>
+                <Link
+                  to='/account'
+                  type='button'
+                  className='d-flex align-items-center justify-content-center btn btn-outline-dark'
+                >
+                  Account
+                </Link>
+                <button
+                  onClick={this.props.logoutAction}
+                  type='button'
+                  className='btn btn-outline-dark'
+                >
+                  Logout
+                </button>
+              </React.Fragment>
+            ) : null}
           </div>
           {showViewersSection ? (
             <div className='col-lg-6 col-sm-12 navbar-btn-right'>
@@ -91,7 +95,7 @@ class NavBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.userData
+  userDetails: state.userData.userDetails
 });
 
 const mapDispatchToProps = {
