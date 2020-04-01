@@ -10,6 +10,8 @@ const persistConfig = {
   storage
 };
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const presistedReducer = persistReducer(persistConfig, rootReducer);
 
 const appMiddlewares = [thunk];
@@ -18,7 +20,7 @@ export default function configureStore(initialState = {}) {
   let reduxStore = createStore(
     presistedReducer,
     initialState,
-    compose(applyMiddleware(...appMiddlewares))
+    composeEnhancers(applyMiddleware(...appMiddlewares))
   );
 
   const persistedStore = persistStore(reduxStore);

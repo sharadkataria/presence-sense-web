@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import RequireAuth from '../../hoc/RequireAuth';
 import { Button, Table, Form } from 'react-bootstrap';
 import NavBar from '../../components/NavBar';
 import styles from './AccountPageStyles.scss';
@@ -96,4 +98,10 @@ class AccountPage extends Component {
   }
 }
 
-export default AccountPage;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default RequireAuth(
+  connect(mapStateToProps, mapDispatchToProps)(AccountPage)
+);

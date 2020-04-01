@@ -1,15 +1,31 @@
 import React, { Component } from 'react';
 import NavBar from '../../components/NavBar';
 import styles from './DocumentPageStyles.scss';
-
+import socketIOClient from 'socket.io-client';
 class DocumentPage extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      documentID: this.props.match.params.docIdentifier
+    };
+    this.socket = null;
   }
 
   componentDidMount() {
-    console.log(this.props.match.params.docIdentifier);
+    this.initialiseSocket();
   }
+
+  initialiseSocket = () => {
+    const { documentID } = this.state;
+    this.socket = socketIOClient('http://localhost:3003/');
+
+    this.socket.on(documentID, payload => {
+      console.log(payload);
+    });
+
+    this.socket.emit('document-connect', { documentID });
+  };
 
   render() {
     return (
@@ -37,6 +53,11 @@ class DocumentPage extends Component {
         </div>
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    const { documentID } = this.state;
+    this.socket.emit('document-disconnect', { documentID });
   }
 }
 

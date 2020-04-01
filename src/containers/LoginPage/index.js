@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import validator from 'validator';
+import get from 'lodash/get';
+import { connect } from 'react-redux';
 import NavBar from '../../components/NavBar';
 import { Form, Button } from 'react-bootstrap';
-
+import AuthService from '../../services/AuthService';
+import LoggedIn from '../../hoc/LoggedIn';
+import { loginAction } from '../../actions/AuthActions';
 class LoginPage extends Component {
   constructor(props) {
     super(props);
@@ -11,8 +16,11 @@ class LoginPage extends Component {
       formData: {
         email: '',
         password: ''
-      }
+      },
+      errors: []
     };
+
+    this.authService = new AuthService();
   }
 
   setStateValues = (fieldName, fieldValue) => {
@@ -30,7 +38,46 @@ class LoginPage extends Component {
     this.props.history.push('/signup');
   };
 
+  formValidation = () => {
+    this.setState({ errors: [] });
+    let errors = [];
+    const { email, password } = this.state.formData;
+
+    if (!validator.isEmail(email)) {
+      errors.push('Invalid email provided.');
+    }
+    if (password.length < 6) {
+      errors.push('Invalid password provided.');
+    }
+
+    if (errors.length) {
+      this.setState({ errors });
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  loginHandler = () => {
+    const formValid = this.formValidation();
+
+    if (!formValid) {
+      return;
+    }
+
+    this.authService
+      .login(this.state.formData)
+      .then(data => {
+        this.props.loginAction(data);
+      })
+      .catch(error => {
+        const errors = get(error, 'response.data', ['Somethign went wrong.']);
+        this.setState({ errors });
+      });
+  };
+
   render() {
+    const { errors } = this.state;
     return (
       <div className='container'>
         <NavBar />
@@ -61,7 +108,11 @@ class LoginPage extends Component {
                 />
               </Form.Group>
             </Form>
-            <Button type='button' variant='outline-dark'>
+            <Button
+              type='button'
+              variant='outline-dark'
+              onClick={this.loginHandler}
+            >
               Login
             </Button>
             <hr />
@@ -77,9 +128,13 @@ class LoginPage extends Component {
               </span>
             </p>
             <hr />
-            <div className='alert alert-danger' role='alert'>
-              A simple danger alert—check it out!
-            </div>
+            {errors.length ? (
+              <div className='alert alert-danger' role='alert'>
+                {errors.map((err, index) => {
+                  return <p key={index}>{err}</p>;
+                })}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -87,4 +142,12 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {
+  loginAction
+};
+
+export default LoggedIn(
+  connect(mapStateToProps, mapDispatchToProps)(LoginPage)
+);

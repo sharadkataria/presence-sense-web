@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import styles from './NavBarStyles.scss';
-import ViewersModal from '../ViewersModal';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { logoutAction } from '../../actions/AuthActions';
 import Viewers from '../Viewers';
+import ViewersModal from '../ViewersModal';
 import ShareModal from '../ShareModal';
-import { Link } from 'react-router-dom';
+import styles from './NavBarStyles.scss';
 class NavBar extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +43,11 @@ class NavBar extends Component {
             >
               Account
             </Link>
-            <button type='button' className='btn btn-outline-dark'>
+            <button
+              onClick={this.props.logoutAction}
+              type='button'
+              className='btn btn-outline-dark'
+            >
               Logout
             </button>
           </div>
@@ -84,4 +90,12 @@ class NavBar extends Component {
   }
 }
 
-export default NavBar;
+const mapStateToProps = state => ({
+  user: state.userData
+});
+
+const mapDispatchToProps = {
+  logoutAction
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
