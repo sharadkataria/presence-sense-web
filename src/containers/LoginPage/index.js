@@ -71,7 +71,7 @@ class LoginPage extends Component {
         this.props.loginAction(data);
       })
       .catch(error => {
-        const errors = get(error, 'response.data', ['Somethign went wrong.']);
+        const errors = get(error, 'response.data', ['Something went wrong.']);
         this.setState({ errors });
       });
   };

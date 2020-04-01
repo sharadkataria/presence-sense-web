@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT } from '../common/Constants';
+import { LOGIN, LOGOUT, REMOVE_DOCUMENTS } from '../common/Constants';
 
 export const loginAction = dataPayload => dispatch => {
   dispatch({
@@ -10,6 +10,11 @@ export const loginAction = dataPayload => dispatch => {
 export const logoutAction = () => dispatch => {
   dispatch({
     type: LOGOUT,
+    payload: {}
+  });
+
+  dispatch({
+    type: REMOVE_DOCUMENTS,
     payload: {}
   });
 };

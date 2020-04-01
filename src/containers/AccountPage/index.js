@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import get from 'lodash/get';
 import RequireAuth from '../../hoc/RequireAuth';
 import { Button, Table, Form } from 'react-bootstrap';
 import NavBar from '../../components/NavBar';
+import DocumentService from '../../services/DocumentService';
+import { getDocuments, addDocument } from '../../actions/DocumentActions';
 import styles from './AccountPageStyles.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
 
 class AccountPage extends Component {
   constructor(props) {
@@ -14,6 +19,12 @@ class AccountPage extends Component {
         name: ''
       }
     };
+
+    this.documentService = new DocumentService();
+  }
+
+  componentDidMount() {
+    this.getDocuments();
   }
 
   handleNavigation = identifier => {
@@ -26,11 +37,41 @@ class AccountPage extends Component {
     this.setState({ formData });
   };
 
-  createDocumentHandler = () => {
-    console.log(this.state.formData);
+  getDocuments = () => {
+    this.documentService
+      .getDocuments()
+      .then(data => {
+        this.props.getDocuments(data);
+      })
+      .catch(error => {
+        const errors = get(error, 'response.data', ['Something went wrong.']);
+        alert(errors);
+      });
+  };
+
+  addDocumentHandler = () => {
+    const { formData } = this.state;
+    if (!formData.name) {
+      return alert('Document name is required.');
+    }
+
+    this.documentService
+      .addDocument(formData)
+      .then(data => {
+        const formData = this.state.formData;
+        formData.name = '';
+        this.setState({ formData });
+        this.props.addDocument(data);
+      })
+      .catch(error => {
+        const errors = get(error, 'response.data', ['Something went wrong.']);
+        alert(errors);
+      });
   };
 
   render() {
+    const { documents } = this.props;
+    const { formData } = this.state;
     return (
       <div className='container' style={styles}>
         <NavBar />
@@ -42,13 +83,15 @@ class AccountPage extends Component {
                 <Form.Control
                   type='text'
                   placeholder='Enter a name'
+                  value={formData.name}
                   onChange={event =>
                     this.setStateValues('name', event.currentTarget.value)
                   }
                 />
               </Form.Group>
             </Form>
-            <Button variant='outline-dark' onClick={this.createDocumentHandler}>
+
+            <Button variant='outline-dark' onClick={this.addDocumentHandler}>
               Create
             </Button>
             <p>
@@ -57,40 +100,32 @@ class AccountPage extends Component {
             </p>
           </div>
           <div className='col-lg-6 col-md-6 col-sm-12 column-item'>
-            <h4>Your documents</h4>
-            <Table bordered hover className='documents-table'>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => this.handleNavigation('123')}
-                >
-                  <td>Mark</td>
-                </tr>
-                <tr
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => this.handleNavigation('13')}
-                >
-                  <td>Jacob</td>
-                </tr>
-                <tr
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => this.handleNavigation('123')}
-                >
-                  <td>Mark</td>
-                </tr>
-                <tr
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => this.handleNavigation('13')}
-                >
-                  <td>Jacob</td>
-                </tr>
-              </tbody>
-            </Table>
+            <h4>Your documents (Scrollable) </h4>
+            {documents && documents.length ? (
+              <Table bordered hover className='documents-table'>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.map((doc, index) => {
+                    return (
+                      <tr
+                        key={index}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => this.handleNavigation(doc.id)}
+                      >
+                        <td>
+                          {doc.name}
+                          {!doc.owner ? <FontAwesomeIcon icon={faUsers} /> : ''}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            ) : null}
           </div>
         </div>
       </div>
@@ -98,9 +133,14 @@ class AccountPage extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  documents: state.documentData.documents
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  getDocuments,
+  addDocument
+};
 
 export default RequireAuth(
   connect(mapStateToProps, mapDispatchToProps)(AccountPage)
