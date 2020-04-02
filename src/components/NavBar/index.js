@@ -26,8 +26,13 @@ class NavBar extends Component {
     this.setState({ showShareModal: !this.state.showShareModal });
   };
 
+  updateDocumentHandler = dataPayload => {
+    this.toggleShareModal();
+    this.props.updateDocument(dataPayload);
+  };
+
   render() {
-    const { showViewersSection, userDetails } = this.props;
+    const { showViewersSection, userDetails, activeDocument } = this.props;
     const { showViewersModal, showShareModal } = this.state;
     return (
       <React.Fragment>
@@ -67,14 +72,16 @@ class NavBar extends Component {
                 <FontAwesomeIcon icon={faUsers} />
               </button>
 
-              <button
-                type='button'
-                className='btn btn-success flow'
-                onClick={this.toggleShareModal}
-              >
-                <FontAwesomeIcon icon={faShareAlt} />
-                Share
-              </button>
+              {activeDocument && activeDocument.owner ? (
+                <button
+                  type='button'
+                  className='btn btn-success flow'
+                  onClick={this.toggleShareModal}
+                >
+                  <FontAwesomeIcon icon={faShareAlt} />
+                  Share
+                </button>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -87,7 +94,11 @@ class NavBar extends Component {
         ) : null}
 
         {showShareModal ? (
-          <ShareModal show={showShareModal} onHide={this.toggleShareModal} />
+          <ShareModal
+            show={showShareModal}
+            onHide={this.toggleShareModal}
+            updateDocument={this.updateDocumentHandler}
+          />
         ) : null}
       </React.Fragment>
     );
@@ -95,7 +106,8 @@ class NavBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  userDetails: state.userData.userDetails
+  userDetails: state.userData.userDetails,
+  activeDocument: state.documentData.activeDocument
 });
 
 const mapDispatchToProps = {

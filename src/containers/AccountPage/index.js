@@ -116,10 +116,7 @@ class AccountPage extends Component {
                         style={{ cursor: 'pointer' }}
                         onClick={() => this.handleNavigation(doc.id)}
                       >
-                        <td>
-                          {doc.name}
-                          {!doc.owner ? <FontAwesomeIcon icon={faUsers} /> : ''}
-                        </td>
+                        <td>{doc.name}</td>
                       </tr>
                     );
                   })}

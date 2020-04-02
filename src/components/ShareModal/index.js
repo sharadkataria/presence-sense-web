@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import get from 'lodash/get';
 import { Modal, Button, Container, Row, Col, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import DocumentService from '../../services/DocumentService';
 import styles from './ShareModalStyles.scss';
 class ShareModal extends Component {
   constructor(props) {
@@ -11,6 +14,8 @@ class ShareModal extends Component {
       emails: [''],
       publicChecked: false
     };
+
+    this.documentService = new DocumentService();
   }
 
   addEmail = () => {
@@ -34,7 +39,53 @@ class ShareModal extends Component {
     this.setState({ publicChecked: !this.state.publicChecked });
   };
 
+  componentDidMount() {
+    const { activeDocument } = this.props;
+    if (activeDocument && activeDocument.public) {
+      this.toggleCheckbox();
+    }
+
+    const sharedUsers = get(activeDocument, 'shared', []);
+    if (sharedUsers.length) {
+      let emails = [];
+      for (let user of sharedUsers) {
+        emails.push(get(user, 'email', ''));
+      }
+      this.setState({ emails });
+    }
+  }
+
+  setEmailValues = (index, fieldValue) => {
+    let { emails } = this.state;
+    emails[index] = fieldValue;
+    this.setState({ emails });
+  };
+
+  updateDocumentHandler = () => {
+    const { emails, publicChecked } = this.state;
+    const documentID = get(this.props, 'activeDocument.id', null);
+
+    const dataPayload = {
+      documentID,
+      publicChecked,
+      emails
+    };
+
+    this.documentService
+      .updateDocument(dataPayload)
+      .then(data => {
+        console.log(data);
+        this.props.updateDocument(data);
+      })
+      .catch(error => {
+        const errors = get(error, 'response.data', ['Something went wrong.']);
+        alert(errors);
+        this.props.history.push('/account');
+      });
+  };
+
   render() {
+    const { activeDocument } = this.props;
     const { emails, publicChecked } = this.state;
     return (
       <Modal
@@ -60,11 +111,18 @@ class ShareModal extends Component {
                               disabled={publicChecked}
                               placeholder='Enter email'
                               value={email}
+                              onChange={event =>
+                                this.setEmailValues(
+                                  index,
+                                  event.currentTarget.value
+                                )
+                              }
                             />
                             {emails.length > 1 ? (
                               <button
                                 type='button'
                                 className='email-cross'
+                                disabled={publicChecked}
                                 onClick={() => this.removeEmail(index)}
                               >
                                 <FontAwesomeIcon icon={faTimes} />
@@ -93,6 +151,7 @@ class ShareModal extends Component {
                   <Form.Check
                     type='checkbox'
                     label='Public'
+                    defaultChecked={get(activeDocument, 'public', false)}
                     onChange={this.toggleCheckbox}
                   />
                 </Form.Group>
@@ -105,7 +164,7 @@ class ShareModal extends Component {
           </Row>
         </Container>
         <Modal.Footer>
-          <Button variant='outline-dark' onClick={this.props.onHide}>
+          <Button variant='outline-dark' onClick={this.updateDocumentHandler}>
             Save
           </Button>
         </Modal.Footer>
@@ -114,4 +173,10 @@ class ShareModal extends Component {
   }
 }
 
-export default ShareModal;
+const mapStateToProps = state => ({
+  activeDocument: state.documentData.activeDocument
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShareModal);

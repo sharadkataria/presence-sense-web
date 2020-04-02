@@ -48,4 +48,16 @@ export default class AccountService {
         throw errorData;
       });
   };
+
+  updateDocument = dataPayload => {
+    return ConnectionInstance.put(getAPIPath(DOCUMENTS_API_PATH), dataPayload)
+      .then(responseData => {
+        if (responseData) {
+          return responseData.data;
+        }
+      })
+      .catch(errorData => {
+        throw errorData;
+      });
+  };
 }

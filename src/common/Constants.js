@@ -12,3 +12,5 @@ export const ADD_DOCUMENTS = 'add/DOCUMENTS';
 export const REMOVE_DOCUMENTS = 'remove/DOCUMENTS';
 export const DOCUMENT_VIEWERS = 'update/DOCUMENT_VIEWERS';
 export const REMOVE_DOCUMENT_VIEWERS = 'remove/DOCUMENT_VIEWERS';
+export const ACTIVE_DOCUMENT = 'add/ACTIVE_DOCUMENT';
+export const REMOVE_ACTIVE_DOCUMENT = 'remove/ACTIVE_DOCUMENT';

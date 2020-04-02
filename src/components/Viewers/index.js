@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './ViewersStyles.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCross, faCut, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import lodash from 'lodash';
 class Viewers extends Component {

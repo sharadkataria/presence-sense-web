@@ -6,14 +6,18 @@ import styles from './DocumentPageStyles.scss';
 import socketIOClient from 'socket.io-client';
 import DocumentService from '../../services/DocumentService';
 import RequireAuth from '../../hoc/RequireAuth';
-import { updateViewers, removeViewers } from '../../actions/DocumentActions';
+import {
+  updateViewers,
+  removeViewers,
+  updateActiveDocument,
+  removeActiveDocument
+} from '../../actions/DocumentActions';
 class DocumentPage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      documentID: this.props.match.params.docIdentifier,
-      document: null
+      documentID: this.props.match.params.docIdentifier
     };
     this.socket = null;
     this.documentService = new DocumentService();
@@ -21,7 +25,6 @@ class DocumentPage extends Component {
 
   componentDidMount() {
     this.getDocumentData();
-    // this.initialiseSocket();
   }
 
   getDocumentData = () => {
@@ -34,13 +37,14 @@ class DocumentPage extends Component {
     this.documentService
       .getDocumentByID(documentID)
       .then(data => {
-        this.setState({ document: data }, () => {
-          this.initialiseSocket();
-        });
+        console.log(data);
+        this.props.updateActiveDocument(data);
+        this.initialiseSocket();
       })
       .catch(error => {
         const errors = get(error, 'response.data', ['Something went wrong.']);
         alert(errors);
+        this.props.history.push('/account');
       });
   };
 
@@ -60,10 +64,17 @@ class DocumentPage extends Component {
     });
   };
 
+  updateDocumentHandler = dataPayload => {
+    this.props.updateActiveDocument(dataPayload);
+  };
+
   render() {
     return (
       <div className='container' style={styles}>
-        <NavBar showViewersSection={true} />
+        <NavBar
+          showViewersSection={true}
+          updateDocument={this.updateDocumentHandler}
+        />
 
         <div className='row'>
           <div className='col-lg-6 col-md-8 col-sm-12 description'>
@@ -90,6 +101,7 @@ class DocumentPage extends Component {
 
   componentWillUnmount() {
     this.props.removeViewers();
+    this.props.removeActiveDocument();
     if (this.socket) this.socket.disconnect();
   }
 }
@@ -100,7 +112,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   updateViewers,
-  removeViewers
+  removeViewers,
+  updateActiveDocument,
+  removeActiveDocument
 };
 
 export default RequireAuth(

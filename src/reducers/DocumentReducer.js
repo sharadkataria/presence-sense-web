@@ -3,7 +3,9 @@ import {
   ADD_DOCUMENTS,
   REMOVE_DOCUMENTS,
   DOCUMENT_VIEWERS,
-  REMOVE_DOCUMENT_VIEWERS
+  REMOVE_DOCUMENT_VIEWERS,
+  ACTIVE_DOCUMENT,
+  REMOVE_ACTIVE_DOCUMENT
 } from '../common/Constants';
 import get from 'lodash/get';
 
@@ -37,6 +39,18 @@ export default (state = {}, action) => {
       return {
         ...state,
         viewers: []
+      };
+
+    case ACTIVE_DOCUMENT:
+      return {
+        ...state,
+        activeDocument: get(action, 'payload', {})
+      };
+
+    case REMOVE_ACTIVE_DOCUMENT:
+      return {
+        ...state,
+        activeDocument: null
       };
 
     default: {
