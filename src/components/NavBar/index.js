@@ -14,7 +14,7 @@ class NavBar extends Component {
 
     this.state = {
       showViewersModal: false,
-      showShareModal: false
+      showShareModal: false,
     };
   }
 
@@ -26,7 +26,7 @@ class NavBar extends Component {
     this.setState({ showShareModal: !this.state.showShareModal });
   };
 
-  updateDocumentHandler = dataPayload => {
+  updateDocumentHandler = (dataPayload) => {
     this.toggleShareModal();
     this.props.updateDocument(dataPayload);
   };
@@ -38,9 +38,6 @@ class NavBar extends Component {
       <React.Fragment>
         <div style={styles} className='row navbar-wrapper'>
           <div className='col-lg-6 col-sm-12 navbar-btn-left'>
-            <button type='button' className='btn btn-outline-dark'>
-              Homepage
-            </button>
             {userDetails ? (
               <React.Fragment>
                 <Link
@@ -105,13 +102,13 @@ class NavBar extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userDetails: state.userData.userDetails,
-  activeDocument: state.documentData.activeDocument
+  activeDocument: state.documentData.activeDocument,
 });
 
 const mapDispatchToProps = {
-  logoutAction
+  logoutAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

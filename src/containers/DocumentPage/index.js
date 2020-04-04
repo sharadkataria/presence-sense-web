@@ -10,14 +10,14 @@ import {
   updateViewers,
   removeViewers,
   updateActiveDocument,
-  removeActiveDocument
+  removeActiveDocument,
 } from '../../actions/DocumentActions';
 class DocumentPage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      documentID: this.props.match.params.docIdentifier
+      documentID: this.props.match.params.docIdentifier,
     };
     this.socket = null;
     this.documentService = new DocumentService();
@@ -36,12 +36,12 @@ class DocumentPage extends Component {
 
     this.documentService
       .getDocumentByID(documentID)
-      .then(data => {
+      .then((data) => {
         console.log(data);
         this.props.updateActiveDocument(data);
         this.initialiseSocket();
       })
-      .catch(error => {
+      .catch((error) => {
         const errors = get(error, 'response.data', ['Something went wrong.']);
         alert(errors);
         this.props.history.push('/account');
@@ -54,17 +54,17 @@ class DocumentPage extends Component {
 
     this.socket = socketIOClient('http://localhost:3003/');
 
-    this.socket.on(documentID, payload => {
+    this.socket.on(documentID, (payload) => {
       this.props.updateViewers(payload);
     });
 
     this.socket.emit('document-connect', {
       documentID,
-      userID: userDetails.id
+      userID: userDetails.id,
     });
   };
 
-  updateDocumentHandler = dataPayload => {
+  updateDocumentHandler = (dataPayload) => {
     this.props.updateActiveDocument(dataPayload);
   };
 
@@ -89,9 +89,12 @@ class DocumentPage extends Component {
 
             <p>
               Click on the 'Share' button to give people access to this
-              document. If this document is private, the invited person should
-              be a user of this platform, but if it is public, anyone with the
-              document link can access it.
+              document. There is an Email field which you can use to give access
+              to this document. If this document is private, the invited person
+              should be a user of this platform, but if it is public, anyone
+              with the document link can access it provided they are logged in.
+              The invited person will see the shared document in his account
+              page.
             </p>
           </div>
         </div>
@@ -106,15 +109,15 @@ class DocumentPage extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  userDetails: state.userData.userDetails
+const mapStateToProps = (state) => ({
+  userDetails: state.userData.userDetails,
 });
 
 const mapDispatchToProps = {
   updateViewers,
   removeViewers,
   updateActiveDocument,
-  removeActiveDocument
+  removeActiveDocument,
 };
 
 export default RequireAuth(

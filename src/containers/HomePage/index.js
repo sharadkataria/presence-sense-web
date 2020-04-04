@@ -5,7 +5,7 @@ class HomePage extends Component {
     super(props);
 
     this.state = {
-      loader: false
+      loader: false,
     };
   }
 

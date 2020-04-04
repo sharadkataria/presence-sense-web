@@ -5,8 +5,12 @@
 
   .navbar-btn-left {
     padding: 4px;
-    justify-content: space-between;
+    justify-content: flex-start;
     display: flex;
+
+    :first-child {
+      margin: 0 50px 0 40px;
+    }
   }
 
   .navbar-btn-right {
