@@ -6,11 +6,11 @@ const API = axios.create({
   timeout: 30000,
   headers: {
     'Access-Control-Allow-Headers':
-      'Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+      'Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization',
     'Content-Type': 'application/json',
-    Accept: 'application/json'
+    Accept: 'application/json',
   },
-  withCredentials: false
+  withCredentials: false,
 });
 
 export default API;

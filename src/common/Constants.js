@@ -1,5 +1,5 @@
-export const API_BASEPATH = 'http://localhost:3003';
-
+// export const API_BASEPATH = 'http://localhost:3003';
+export const API_BASEPATH = 'https://postman-doc-server.herokuapp.com';
 export const LOGIN_API_PATH = 'login';
 export const SIGNUP_API_PATH = 'signup';
 export const DOCUMENTS_API_PATH = 'documents';
